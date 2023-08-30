@@ -1,0 +1,53 @@
+Exercicio 01
+Ao inserir um funcionário, a trigger deve validar se a renda é positiva e inserir um registro na tabela de log.
+
+create table funcionario
+(cod_func number(38), 
+    nome varchar2(100), 
+    cod_dpto number(38), 
+    valor_salario number(12,2),
+constraint func_pk primary key (cod_func));
+
+insert into funcionario (cod_func, nome, cod_dpto, valor_salario) 
+    values (1, 'Joana', 010, 1200);
+insert into funcionario (cod_func, nome, cod_dpto, valor_salario) 
+    values (2, 'Pedro', 020, 2100);
+insert into funcionario (cod_func, nome, cod_dpto, valor_salario) 
+    values (3, 'Josefa', 030, 3200);
+insert into funcionario (cod_func, nome, cod_dpto, valor_salario) 
+    values (4, 'Marga', 040, 2500);
+insert into funcionario (cod_func, nome, cod_dpto, valor_salario) 
+    values (5, 'Otilia', 050, 3000);
+insert into funcionario (cod_func, nome, cod_dpto, valor_salario) 
+    values (6, 'Genoveva', 060, 5200);
+insert into funcionario (cod_func, nome, cod_dpto, valor_salario) 
+    values (7, 'Amanda', 070, 1500);
+insert into funcionario (cod_func, nome, cod_dpto, valor_salario) 
+    values (8, 'Luis', 080, 1100);
+insert into funcionario (cod_func, nome, cod_dpto, valor_salario) 
+    values (9, 'Sergio', 090, 2200);
+insert into funcionario (cod_func, nome, cod_dpto, valor_salario) 
+    values (10, 'Lucia', 100, 150);
+insert into funcionario (cod_func, nome, cod_dpto, valor_salario) 
+    values (11, 'Helena', 101, 200);
+select*from funcionario;
+
+create table log_info
+(dt_info date, informacao varchar2(120));
+
+--Exercicio 02
+--Ao inserir um funcionário, a trigger deve validar se a renda é positiva e inserir um registro na tabela de log.
+
+Create or replace trigger trg_exemplo3
+before insert
+on funcionario for each row
+begin
+if :new.valor_salario<0 then
+raise_application_error (-20200, 'Valor renda negativo');
+end if;
+if :new.valor_salario>=0 then
+insert into log_info (dt_info, informacao)
+values (sysdate, :new.nome);
+end if;
+end;
+
